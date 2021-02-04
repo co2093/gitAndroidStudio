@@ -2,10 +2,14 @@ package com.example.sqldemo3;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 
@@ -48,5 +52,51 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }else{
             return true;
         }
+    }
+
+    public List<CustomerModel> getEveryone(){
+
+        List<CustomerModel> returnList = new ArrayList<>();
+
+        String queryString = "SELECT * FROM " + CUSTOMER_TABLE;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        if (cursor.moveToFirst()){
+
+            do{
+                int customerId = cursor.getInt(0);
+                int customerAge = cursor.getInt(1);
+                String customerName = cursor.getString(2);
+                boolean customerActive = cursor.getInt(3) == 1 ? true: false;
+
+                CustomerModel newCustomer = new CustomerModel(customerId, customerName, customerAge, customerActive);
+                returnList.add(newCustomer);
+
+            }while (cursor.moveToNext());
+
+        }else{
+
+        }
+        cursor.close();
+        db.close();
+        return returnList;
+    }
+
+    public boolean deleteOne(CustomerModel customerModel){
+
+        SQLiteDatabase db = getWritableDatabase();
+        String queryString = "DELETE FROM " + CUSTOMER_TABLE + " WHERE " + COLUMN_ID + " = " + customerModel.getId();
+
+        Cursor cursor = db.rawQuery(queryString, null);
+
+         if (cursor.moveToFirst()){
+             return true;
+         }else {
+             return false;
+         }
+
     }
 }

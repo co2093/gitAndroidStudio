@@ -51,11 +51,11 @@ public class CustomerModel {
 
     @Override
     public String toString() {
-        return "CustomerModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", isActive=" + isActive +
-                '}';
+        return
+                "ID=" + id +
+                ", Name='" + name + '\'' +
+                ", Age=" + age +
+                ", Active=" + isActive +
+                '.';
     }
 }
